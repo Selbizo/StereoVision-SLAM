@@ -78,9 +78,11 @@ namespace slam
         vectors from images, which will help in identifying potential loop closure candidates.
         */
 
-        std::string modelPath = "./dnn_weights/mobilenet_v2.onnx";
+        std::string modelPath = "/home/selbizo/CV/StabAndSLAM/StereoVision-SLAM/StereoVision-SLAM/dnn_weights/mobilenet_v2_simplified.onnx";
         network_ = cv::dnn::readNetFromONNX(modelPath);
-
+        
+        std::vector<cv::String> layerNames__ = network_.getLayerNames();
+        for (auto &name : layerNames__) std::cout << name << std::endl;
         // Check if the model was loaded successfully
         if (network_.empty()) 
         {
@@ -118,7 +120,7 @@ namespace slam
         network_.setInput(blob);
 
         // Perform the forward pass to get the feature vector
-        std::string featureLayerName = "/GlobalAveragePool_output_0"; 
+        std::string featureLayerName = "output"; 
         cv::Mat output = network_.forward(featureLayerName);
 
         // Copy data from cv::Mat to Eigen vector
